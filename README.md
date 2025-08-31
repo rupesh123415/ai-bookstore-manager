@@ -1,2 +1,2 @@
 # ai-bookstore-manager
-Theis project mainly AIMS to use AI to manage the bookstore easily.
+This project mainly AIMS to use AI to manage the bookstore easily.
