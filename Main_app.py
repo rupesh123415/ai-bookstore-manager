@@ -14,7 +14,7 @@ st.set_page_config(
 
 # Supabase and OpenAI API Configuration
 OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_URL = "https://nstsuzabnztqriureeoi.supabase.co"
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 # Initialize clients
