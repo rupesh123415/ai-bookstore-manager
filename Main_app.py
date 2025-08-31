@@ -4,6 +4,7 @@ from openai import OpenAI
 from supabase import create_client
 import json
 import pandas as pd
+import os
 
 # Set the Appliction page configuration
 st.set_page_config(
@@ -13,18 +14,56 @@ st.set_page_config(
 )
 
 # Supabase and OpenAI API Configuration
-OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
+# Try to get secrets from Streamlit, fallback to environment variables
+try:
+    OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
+    SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+except:
+    # Fallback to environment variables for deployment
+    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+    SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
 SUPABASE_URL = "https://nstsuzabnztqriureeoi.supabase.co"
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
+# Check if API keys are available
+if not OPENROUTER_API_KEY or not SUPABASE_KEY:
+    st.error("""
+    ❌ **API Keys Not Configured**
+    
+    Please configure your API keys in one of the following ways:
+    
+    **For Local Development:**
+    1. Create a `.streamlit/secrets.toml` file with your API keys
+    2. Or set environment variables: `OPENROUTER_API_KEY` and `SUPABASE_KEY`
+    
+    **For Streamlit Cloud Deployment:**
+    1. Go to your app settings in Streamlit Cloud
+    2. Add these secrets in the "Secrets" section:
+       - `OPENROUTER_API_KEY`
+       - `SUPABASE_KEY`
+    
+    **For Other Deployments:**
+    Set these environment variables in your deployment platform.
+    """)
+    st.stop()
 
 # Initialize clients
 @st.cache_resource
 def init_clients():
-    client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY)
-    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-    return client, supabase
+    try:
+        client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY)
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        return client, supabase
+    except Exception as e:
+        st.error(f"❌ Failed to initialize clients: {str(e)}")
+        return None, None
 
 client, supabase = init_clients()
+
+# Check if clients are properly initialized
+if client is None or supabase is None:
+    st.error("❌ Failed to initialize API clients. Please check your API keys and try again.")
+    st.stop()
 
 # The function takes a natural language prompt as input and returns a list of books that match the prompt
 
