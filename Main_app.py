@@ -13,9 +13,9 @@ st.set_page_config(
 )
 
 # Supabase and OpenAI API Configuration
-OPENROUTER_API_KEY = "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"
-SUPABASE_URL = "https://nstsuzabnztqriureeoi.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdHN1emFibnp0cXJpdXJlZW9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxNTE1MTksImV4cCI6MjA3MTcyNzUxOX0.lHjfHAQVCnxGePPAQAFkOkR0nsF29A7gqCaox67InZE"
+OPENROUTER_API_KEY = st.secrets["OPENROUTER_API_KEY"]
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 # Initialize clients
 @st.cache_resource
